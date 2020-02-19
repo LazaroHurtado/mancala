@@ -15,10 +15,8 @@ def playGame():
 			if pit_choosen[0] == player_pits[current_player]:
 				play_again = gameClass.player_pit(pit_choosen, player_pits[current_player])
 				if current_player == player_one and not play_again:
-					print('hi')
 					current_player = player_two
 				elif current_player == player_two and not play_again:
-					print('hi')
 					current_player = player_one
 			else:
 				print('>> You can not choose that pit, try again')

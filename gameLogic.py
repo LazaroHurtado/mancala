@@ -45,7 +45,7 @@ class Mancala:
 				line_4 += '  '+current_pit_val+' |'
 		line_4 += '       '
 		line_5 = '       |  A1 |  A2 |  A3 |  A4 |  A5 |  A6 |       '
-		print(line_1+'\n'+line_2+'\n'+line_3+'\n'+line_4+'\n'+line_5)
+		print('\n'+line_1+'\n'+line_2+'\n'+line_3+'\n'+line_4+'\n'+line_5)
 
 	def set_up(self):
 		pits = ['B6','B5','B4','B3','B2','B1','P1','A6','A5','A4','A3','A2','A1','P2']
@@ -64,6 +64,7 @@ class Mancala:
 
 	def player_pit(self, pit, player):
 		stores = ['P1','P2']
+		show_message = False
 		if player == 'A':
 			not_store = 'P2'
 			store = 'P1'
@@ -86,11 +87,18 @@ class Mancala:
 				pit_across_val = self.pits_node[pit_across].get_val()
 				self.pits_node[pit_across].add_val(-pit_across_val)
 				self.pits_node[store].add_val(1+pit_across_val)
+				show_message = True
+				message = '>> Your last chip landed on an empty pit!\n>> You take '+next_pit.get_pit()+' and '+pit_across
 			else:
 				next_pit.add_val(1)
 			if i != pit_value-1:
 				next_pit = next_pit.get_next()
-		self.show_board()
+		if show_message:
+			self.show_board()
+			print(message)
+		else:
+			self.show_board()
 		if next_pit.get_pit() in stores and next_pit.get_pit() != not_store:
+			print('>> You landed in your store, go again!')
 			return True
 		return False
