@@ -63,10 +63,13 @@ class Mancala:
 		self.pits_node[pits.pop()].set_next(last_pit)
 
 	def player_pit(self, pit, player):
+		stores = ['P1','P2']
 		if player == 'A':
 			not_store = 'P2'
+			store = 'P1'
 		else:
 			not_store = 'P1'
+			store = 'P2'
 		pit_value = self.pits_node[pit].get_val()
 		current_pit = pit
 		current_pit_node = self.pits_node[pit]
@@ -75,6 +78,19 @@ class Mancala:
 		for i in range(pit_value):
 			if next_pit.get_pit() == not_store:
 				next_pit = next_pit.get_next()
-			next_pit.add_val(1)
-			next_pit = next_pit.get_next()
+			if i == pit_value-1 and next_pit.get_val() == 0 and next_pit.get_pit()[0] == pit[0]:
+				if pit[0] == 'A':
+					pit_across = 'B' + str(6-(int(next_pit.get_pit()[1])-1))
+				else:
+					pit_across = 'A' + str(6-(int(next_pit.get_pit()[1])-1))
+				pit_across_val = self.pits_node[pit_across].get_val()
+				self.pits_node[pit_across].add_val(-pit_across_val)
+				self.pits_node[store].add_val(1+pit_across_val)
+			else:
+				next_pit.add_val(1)
+			if i != pit_value-1:
+				next_pit = next_pit.get_next()
 		self.show_board()
+		if next_pit.get_pit() in stores and next_pit.get_pit() != not_store:
+			return True
+		return False
