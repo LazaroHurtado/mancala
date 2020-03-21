@@ -72,10 +72,10 @@ class Mancala:
         node.pick_up()
         cur = node.next
         to_add = []
-        opponent = "P2" if player == "A" else "P1"
+        opponent_store = "P2" if player == "A" else "P1"
 
         for i in range(val):
-            if cur.get_pit() != opponent:
+            if cur.get_pit() != opponent_store:
                 to_add.append(cur)
             cur = cur.next
         self.add_pits(to_add)
@@ -83,6 +83,7 @@ class Mancala:
         final = to_add[-1]
         final_pit = final.get_pit()
         go_again = self.go_again(final_pit)
+        self.take_across(final, player)
 
         self.show_board()
         if go_again:
@@ -104,4 +105,23 @@ class Mancala:
         return last[0] == "P"
 
     def take_across(self, last, player):
-        pass
+        if last.get_val() != 1 or last.get_pit()[0] != player:
+            return
+        print(">> You landed on an empty pit!")
+
+        opponent = "B" if player == "A" else "A"
+        last_pit = last.get_pit()
+        last_pos = int(last_pit[1])
+        across_pos = 7 - last_pos
+        across_pit = opponent+str(across_pos)
+        print(f">> You collect the stones on pit {across_pit} and {last_pit}")
+
+        across_node = self.pit_nodes[across_pit]
+        across_val = across_node.get_val()
+        across_node.pick_up()
+        last.pick_up()
+
+        store_pit = "P1" if player == "A" else "P2"
+        store_node = self.pit_nodes[store_pit]
+        store_node.add_val(across_val+1)
+        return
