@@ -34,7 +34,7 @@ class Mancala:
         P2_val = P2_node.get_val()
         P1_node = self.pit_nodes["P1"]
         P1_val = P1_node.get_val()
-        line_3 = "P2 "+ (str(P2_val) if P2_val > 9 else "0"+str(P2_val))+" --------------------------- "+(str(P1_val) if P1_val > 9 else "0"+str(P1_val))+" P1\n"
+        line_3 = "P2 "+ (str(P2_val) if P2_val > 9 else "0"+str(P2_val))+" "+("-"*27)+" "+(str(P1_val) if P1_val > 9 else "0"+str(P1_val))+" P1\n"
         line_4 = "      "
         A_pits = ["A1", "A2", "A3", "A4", "A5", "A6"]
 
@@ -72,21 +72,21 @@ class Mancala:
         node.pick_up()
         cur = node.next
         to_add = []
+        opponent = "P2" if player == "A" else "P1"
 
         for i in range(val):
-            to_add.append(cur)
+            if cur.get_pit() != opponent:
+                to_add.append(cur)
             cur = cur.next
         self.add_pits(to_add)
 
         final = to_add[-1]
         final_pit = final.get_pit()
-        player_pits = [("1", "A"), ("2", "B")]
+        go_again = self.go_again(final_pit)
 
-        if final_pit in ["P1", "P2"]:
-            if (final_pit[1], player) in player_pits:
-                self.show_board()
-                return True
         self.show_board()
+        if go_again:
+            return True
         return False
 
     def add_pits(self, pit_arr):
@@ -99,3 +99,9 @@ class Mancala:
         node = self.pit_nodes[pit]
         val = node.get_val()
         return val > 0
+
+    def go_again(self, last):
+        return last[0] == "P"
+
+    def take_across(self, last, player):
+        pass
